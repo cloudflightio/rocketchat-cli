@@ -17,11 +17,10 @@ package main
 import (
 	"github.com/mriedmann/rocketchat-cli/cmd"
 	"github.com/mriedmann/rocketchat-cli/controllers"
-	"github.com/spf13/viper"
 )
 
 func main() {
-	cmd.Config = viper.New()
+	cmd.ConfigControllerFactory = controllers.NewViperConfigController
 	cmd.ApiControllerFactory = controllers.NewSdkApiController
 	cmd.Execute()
 }

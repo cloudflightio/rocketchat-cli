@@ -5,7 +5,6 @@ import (
 	"github.com/mriedmann/rocketchat-cli/controllers"
 	"github.com/mriedmann/rocketchat-cli/models"
 	"github.com/mriedmann/rocketchat-cli/test"
-	"github.com/spf13/viper"
 	"github.com/stretchr/testify/assert"
 	"net/url"
 	"strings"
@@ -13,19 +12,17 @@ import (
 )
 
 func TestUpdatePermissionsCli(t *testing.T) {
-	Config = viper.New()
-	Config.Set("rocketchat.url", "http://localhost:3000")
-
 	permissionsId := "add-user-to-any-p-room"
 	roles := []string{"admin", "user"}
 
 	vm := models.UpdatePermissionsViewModel{PermissionId: permissionsId, Roles: roles}
+	c := test.MockedApiController{}
 
 	ApiControllerFactory = func(url *url.URL, b bool, credentials *models.UserCredentials) controllers.ApiController {
-		apiController := test.MockedApiController{}
-		apiController.On("UpdatePermissions", &vm).Return(nil)
-		return &apiController
+		c.On("UpdatePermissions", &vm).Return(nil)
+		return &c
 	}
+	ConfigControllerFactory = NewMockedConfigController
 
 	buf := new(bytes.Buffer)
 	rootCmd.SetOutput(buf)
@@ -38,5 +35,5 @@ func TestUpdatePermissionsCli(t *testing.T) {
 	assert.Empty(t, output)
 
 	assert.NotNil(t, cmd)
-	apiController.(*test.MockedApiController).AssertExpectations(t)
+	c.AssertExpectations(t)
 }

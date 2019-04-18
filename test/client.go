@@ -4,7 +4,6 @@ import (
 	"github.com/RocketChat/Rocket.Chat.Go.SDK/models"
 	"github.com/RocketChat/Rocket.Chat.Go.SDK/rest"
 	"github.com/stretchr/testify/mock"
-	"net/url"
 )
 
 type MockedClient struct {
@@ -32,9 +31,4 @@ func (m *MockedClient) UpdatePermissions(req *rest.UpdatePermissionsRequest) (*r
 	} else {
 		return r.(*rest.UpdatePermissionsResponse), args.Error(1)
 	}
-}
-
-func (m *MockedClient) Get(api string, params url.Values, response rest.Response) error {
-	args := m.Called(api, params, response)
-	return args.Error(0)
 }

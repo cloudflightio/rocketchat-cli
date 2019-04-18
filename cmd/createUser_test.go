@@ -19,6 +19,7 @@ var vm = models.CreateUserViewModel{
 }
 
 func TestCreateUserCli(t *testing.T) {
+	ConfigControllerFactory = NewMockedConfigController
 	ApiControllerFactory = func(url *url.URL, b bool, credentials *models.UserCredentials) controllers.ApiController {
 		apiController := test.MockedApiController{}
 		apiController.On("CreateUser", &vm).Return(nil)

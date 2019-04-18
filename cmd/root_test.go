@@ -2,7 +2,6 @@ package cmd
 
 import (
 	"bytes"
-	"github.com/mitchellh/go-homedir"
 	"github.com/mriedmann/rocketchat-cli/controllers"
 	"github.com/mriedmann/rocketchat-cli/models"
 	"github.com/mriedmann/rocketchat-cli/test"
@@ -10,8 +9,6 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 	"net/url"
-	"os"
-	"strings"
 	"testing"
 )
 
@@ -26,6 +23,18 @@ var (
 	rocketchatUrlRaw = "http://localhost:3000"
 )
 
+func NewMockedConfigController(s string, b bool) controllers.ConfigController {
+	c := test.MockedConfigController{}
+	c.On("IsSet", "rocketchat.url").Return(true)
+	c.On("GetString", "rocketchat.url").Return(rocketchatUrlRaw)
+
+	c.On("GetString", "user.email").Return(testCredentials.Email)
+	c.On("GetString", "user.id").Return(testCredentials.ID)
+	c.On("GetString", "user.token").Return(testCredentials.Token)
+	c.On("GetString", "user.password").Return(testCredentials.Password)
+	return &c
+}
+
 func runCmd(args []string) (*bytes.Buffer, *cobra.Command, error) {
 	buf := new(bytes.Buffer)
 	rootCmd.SetOutput(buf)
@@ -34,108 +43,35 @@ func runCmd(args []string) (*bytes.Buffer, *cobra.Command, error) {
 	return buf, cmd, err
 }
 
-func setMockedConfigDefault(config *test.MockedConfig) {
-	config.On("SetConfigType", mock.AnythingOfType("string"))
-	config.On("SetEnvPrefix", mock.AnythingOfType("string"))
-
-	config.On("SetConfigFile", cfgFile).Maybe()
-	config.On("AddConfigPath", mock.AnythingOfType("string")).Maybe()
-	config.On("SetConfigName", mock.AnythingOfType("string")).Maybe()
-
-	config.On("SetEnvKeyReplacer", mock.AnythingOfType("*strings.Replacer"))
-	config.On("AutomaticEnv")
-	config.On("ReadInConfig").Return(nil)
-
-	config.On("IsSet", "rocketchat.url").Return(true)
-	config.On("GetString", "rocketchat.url").Return(rocketchatUrlRaw)
-
-	config.On("IsSet", mock.AnythingOfType("string")).Return(false)
-	config.On("GetString", mock.AnythingOfType("string")).Return("")
-}
-
-func TestMain(m *testing.M) {
-	config := test.MockedConfig{}
-	setMockedConfigDefault(&config)
-	Config = &config
-
-	retCode := m.Run()
-	Config = nil
-	os.Exit(retCode)
-}
-
-var mockedConfig test.MockedConfig
-
 func TestRootInitConfig(t *testing.T) {
-	home, _ := homedir.Dir()
+	c := test.MockedConfigController{}
 
-	mockedConfig = test.MockedConfig{}
-
-	mockedConfig.On("SetConfigType", "yaml")
-	mockedConfig.On("SetEnvPrefix", "rccli")
-	mockedConfig.On("AddConfigPath", home)
-	mockedConfig.On("AddConfigPath", ".")
-	mockedConfig.On("SetConfigName", ".rocketchat-cli")
-
-	mockedConfig.On("SetEnvKeyReplacer", strings.NewReplacer(".", "_"))
-	mockedConfig.On("AutomaticEnv")
-	mockedConfig.On("ReadInConfig").Return(nil)
-
-	mockedConfig.On("IsSet", "rocketchat.url").Return(true)
-	mockedConfig.On("GetString", "rocketchat.url").Return(rocketchatUrlRaw)
-
-	mockedConfig.On("GetString", "user.email").Return(testCredentials.Email)
-	mockedConfig.On("GetString", "user.id").Return(testCredentials.ID)
-	mockedConfig.On("GetString", "user.token").Return(testCredentials.Token)
-	mockedConfig.On("GetString", "user.password").Return(testCredentials.Password)
-
-	Config = &mockedConfig
+	ConfigControllerFactory = NewMockedConfigController
 
 	initConfig()
 
-	mockedConfig.AssertExpectations(t)
+	c.AssertExpectations(t)
 }
 
 func TestRootInitConfigFile(t *testing.T) {
 	cfgFile = "testconfigfile"
 
-	config := test.MockedConfig{}
-	config.On("SetConfigType", "yaml")
-	config.On("SetEnvPrefix", "rccli")
+	c := test.MockedConfigController{}
 
-	config.On("SetConfigFile", cfgFile)
-
-	config.On("SetEnvKeyReplacer", strings.NewReplacer(".", "_"))
-	config.On("AutomaticEnv")
-	config.On("ReadInConfig").Return(nil)
-
-	config.On("IsSet", "rocketchat.url").Return(true)
-	config.On("GetString", "user.email").Return(testCredentials.Email)
-	config.On("GetString", "user.id").Return(testCredentials.ID)
-	config.On("GetString", "user.token").Return(testCredentials.Token)
-	config.On("GetString", "user.password").Return(testCredentials.Password)
-	config.On("GetString", "rocketchat.url").Return(rocketchatUrlRaw)
-
-	Config = &config
+	ConfigControllerFactory = NewMockedConfigController
 
 	initConfig()
 
-	config.AssertExpectations(t)
+	c.AssertExpectations(t)
 }
 
 func TestRootInitConfigNoUrl(t *testing.T) {
-	config := test.MockedConfig{}
-	config.On("SetConfigType", mock.AnythingOfType("string"))
-	config.On("SetEnvPrefix", mock.AnythingOfType("string"))
-	config.On("SetConfigFile", cfgFile).Maybe()
-	config.On("AddConfigPath", mock.AnythingOfType("string")).Maybe()
-	config.On("SetConfigName", mock.AnythingOfType("string")).Maybe()
+	config := test.MockedConfigController{}
 
-	config.On("SetEnvKeyReplacer", mock.AnythingOfType("*strings.Replacer"))
-	config.On("AutomaticEnv")
-	config.On("ReadInConfig").Return(nil)
-
-	config.On("IsSet", "rocketchat.url").Return(false)
-	Config = &config
+	ConfigControllerFactory = func(s string, b bool) controllers.ConfigController {
+		config.On("IsSet", "rocketchat.url").Return(false)
+		return &config
+	}
 
 	assert.PanicsWithValue(t, "config error - rocketchat.url not set", initConfig)
 }
@@ -148,22 +84,15 @@ func TestRootInitConfigInvalidUrl(t *testing.T) {
 		return nil
 	}
 
-	config := test.MockedConfig{}
-	config.On("SetConfigType", mock.AnythingOfType("string"))
-	config.On("SetEnvPrefix", mock.AnythingOfType("string"))
-	config.On("SetConfigFile", cfgFile).Maybe()
-	config.On("AddConfigPath", mock.AnythingOfType("string")).Maybe()
-	config.On("SetConfigName", mock.AnythingOfType("string")).Maybe()
+	c := test.MockedConfigController{}
+	ConfigControllerFactory = func(s string, b bool) controllers.ConfigController {
 
-	config.On("SetEnvKeyReplacer", mock.AnythingOfType("*strings.Replacer"))
-	config.On("AutomaticEnv")
-	config.On("ReadInConfig").Return(nil)
+		c.On("IsSet", "rocketchat.url").Return(true)
+		c.On("GetString", "rocketchat.url").Return(invalidUrl)
 
-	config.On("IsSet", "rocketchat.url").Return(true)
-	config.On("GetString", "rocketchat.url").Return(invalidUrl)
-
-	config.On("GetString", mock.AnythingOfType("string")).Return("")
-	Config = &config
+		c.On("GetString", mock.AnythingOfType("string")).Return("")
+		return &c
+	}
 
 	assert.Panics(t, initConfig)
 }

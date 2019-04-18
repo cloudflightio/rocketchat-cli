@@ -6,16 +6,12 @@ import (
 	"time"
 )
 
-// pingCmd represents the ping command
 var pingCmd = &cobra.Command{
 	Use:   "ping",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
+	Short: "Tries to login to the rest-api.",
+	Long: `Tries to execute the rest-api login flow, using email and password to authenticate. 
 
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+Mind the rate limiting of rocketchat. Use the waitTime argument to extend time between tries.`,
 	RunE: func(cmd *cobra.Command, args []string) (err error) {
 		err = apiController.Ping(maxAttempts, time.Duration(waitTimeInSec)*time.Second, Verbose)
 		if err != nil {
