@@ -1,0 +1,9 @@
+vendor
+.*
+.idea
+.dockerignore
+Dockerfile
+README.md
+*.iml
+**/*_test.go
+*.yaml

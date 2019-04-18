@@ -17,3 +17,4 @@ rocketchat-cli
 rocketchat-cli.iml
 .idea
 .rocketchat-cli.yaml
+vendor
