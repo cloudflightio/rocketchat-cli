@@ -45,6 +45,16 @@ jobs:
             mkdir -p $GOCACHE
             go build -v
             go test -p 6 -race ./...
+
+      - run:
+          name: install
+          command: |
+            mkdir -p $GOCACHE
+            go install -v ./...
+
+      - store_artifacts:
+          path: /go/bin/rocketchat-cli
+
       - save_cache:
           key: build-cache-{{ .Branch }}-{{ .Environment.CIRCLE_BUILD_NUM }}
           paths:
