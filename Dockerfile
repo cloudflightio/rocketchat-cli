@@ -10,9 +10,9 @@ COPY . .
 
 RUN dep ensure -vendor-only
 
-RUN go install -v ./...
+RUN GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go install -v ./...
 
-FROM golang:1.10
+FROM scratch
 
 COPY --from=builder /go/bin/rocketchat-cli /bin/rocketchat-cli
 
