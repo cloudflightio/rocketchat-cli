@@ -1,0 +1,7 @@
+FROM mriedmann/rocketchat-cli:latest as bin
+
+FROM alpine:3.9
+
+COPY --from=bin /bin/rocketchat-cli /bin/rocketchat-cli
+
+ENTRYPOINT ["/bin/sh", "-c", "rocketchat-cli"]
