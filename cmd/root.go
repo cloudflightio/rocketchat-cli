@@ -56,6 +56,9 @@ func initConfig() {
 	if err != nil {
 		panic(fmt.Errorf("Fatal error: %s \n", err))
 	}
+	if !url.IsAbs() {
+		panic(fmt.Errorf("Fatal error: %s \n", "relative url! Please provide a absolute url for the target rocketchat instance"))
+	}
 
 	apiController = ApiControllerFactory(url, Verbose, &credentials)
 }

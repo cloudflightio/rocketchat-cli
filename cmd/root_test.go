@@ -96,3 +96,24 @@ func TestRootInitConfigInvalidUrl(t *testing.T) {
 
 	assert.Panics(t, initConfig)
 }
+
+func TestRootInitConfigBadUrl(t *testing.T) {
+	var invalidUrl = "invalidurl"
+
+	ApiControllerFactory = func(url *url.URL, b bool, credentials *models.UserCredentials) controllers.ApiController {
+		t.Fail()
+		return nil
+	}
+
+	c := test.MockedConfigController{}
+	ConfigControllerFactory = func(s string, b bool) controllers.ConfigController {
+
+		c.On("IsSet", "rocketchat.url").Return(true)
+		c.On("GetString", "rocketchat.url").Return(invalidUrl)
+
+		c.On("GetString", mock.AnythingOfType("string")).Return("")
+		return &c
+	}
+
+	assert.Panics(t, initConfig)
+}
