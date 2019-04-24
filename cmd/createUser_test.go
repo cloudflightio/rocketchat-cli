@@ -8,6 +8,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"net/url"
 	"regexp"
+	"strings"
 	"testing"
 )
 
@@ -73,6 +74,30 @@ func TestCreateUserCliIgnoreExisting(t *testing.T) {
 	}
 
 	args := []string{"createUser", "-n", vm.Name, "-u", vm.Username, "-e", vm.Email, "-p", vm.Password, "-i"}
+
+	buf, cmd, err := runCmd(args)
+	assert.NoError(t, err)
+
+	output := buf.String()
+	assert.Empty(t, output)
+
+	assert.NotNil(t, cmd)
+	apiController.(*test.MockedApiController).AssertExpectations(t)
+}
+
+func TestCreateUserCliRoles(t *testing.T) {
+	IgnoreExisting = false //TODO: find solution for global var "bleeding"
+	vm := models.CreateUserViewModel(vm)
+	vm.Roles = []string{"bot", "admin"}
+
+	ConfigControllerFactory = NewMockedConfigController
+	ApiControllerFactory = func(url *url.URL, b bool, credentials *models.UserCredentials) controllers.ApiController {
+		apiController := test.MockedApiController{}
+		apiController.On("CreateUser", &vm).Return(nil)
+		return &apiController
+	}
+
+	args := []string{"createUser", "-n", vm.Name, "-u", vm.Username, "-e", vm.Email, "-p", vm.Password, "-r", strings.Join(vm.Roles, ",")}
 
 	buf, cmd, err := runCmd(args)
 	assert.NoError(t, err)

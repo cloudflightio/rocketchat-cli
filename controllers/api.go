@@ -55,6 +55,7 @@ func (c *SdkApiController) CreateUser(model *models.CreateUserViewModel) (err er
 		Email:        model.Email,
 		Password:     model.Password,
 		Username:     model.Username,
+		Roles:        model.Roles,
 		CustomFields: nil,
 	}
 

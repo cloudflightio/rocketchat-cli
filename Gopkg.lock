@@ -3,14 +3,14 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:134bc3c89539724eeb5aa5d805d0602d5b25544294d10af45119d0bb83cb704c"
+  digest = "1:8cb49c7c169ac22052168a55e8e447c21996c2ceda984ce3c88f6045276950c5"
   name = "github.com/RocketChat/Rocket.Chat.Go.SDK"
   packages = [
     "models",
     "rest",
   ]
   pruneopts = "UT"
-  revision = "677eed36173b807ba361905c0054bb5e978bc29b"
+  revision = "9ddf5509ddc2f3efe26a3742180dc18472391f7e"
   source = "github.com/mriedmann/Rocket.Chat.Go.SDK"
 
 [[projects]]
@@ -179,14 +179,14 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:d53852c73a1e10a3b9f26554fdea3f3a30f01652bc963417eb1d4f7baab8ce33"
+  digest = "1:41aaf393ca0e2fa523e428b29f58fbc9a4bc9f975da5b9b1cac7cef1436a7b53"
   name = "golang.org/x/sys"
   packages = ["unix"]
   pruneopts = "UT"
-  revision = "f0ce4c0180bef7e9c51babed693a6e47fdd8962f"
+  revision = "18eb32c0e2f0c2bc8d17842ed4ad41486f349ad4"
 
 [[projects]]
-  digest = "1:8029e9743749d4be5bc9f7d42ea1659471767860f0cdc34d37c3111bd308a295"
+  digest = "1:1e937eedccd32128f7348bae5d224bf9c0c245e19a7f55e38da7cd90732f060d"
   name = "golang.org/x/text"
   packages = [
     "internal/gen",
@@ -197,8 +197,8 @@
     "unicode/norm",
   ]
   pruneopts = "UT"
-  revision = "f21a4dfb5e38f5895301dc265a8def02365cc3d0"
-  version = "v0.3.0"
+  revision = "c942b20a5d85b458c4dce1589326051d85e25d6d"
+  version = "v0.3.1"
 
 [[projects]]
   digest = "1:4d2e5a73dc1500038e504a8d78b986630e3626dc027bc030ba5c75da257cdb96"

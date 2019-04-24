@@ -12,6 +12,7 @@ type CreateUserViewModel struct {
 	Email          string
 	Password       string
 	Username       string
+	Roles          []string
 	IgnoreExisting bool
 }
 
