@@ -41,6 +41,7 @@ func TestCreateUserCli(t *testing.T) {
 func TestCreateUserCliCreateFailed(t *testing.T) {
 	expectedError := errors.New("create error")
 
+	ConfigControllerFactory = NewMockedConfigController
 	ApiControllerFactory = func(url *url.URL, b bool, credentials *models.UserCredentials) controllers.ApiController {
 		apiController := test.MockedApiController{}
 		apiController.On("CreateUser", &vm).Return(expectedError)
@@ -64,6 +65,7 @@ func TestCreateUserCliIgnoreExisting(t *testing.T) {
 	vm := models.CreateUserViewModel(vm)
 	vm.IgnoreExisting = true
 
+	ConfigControllerFactory = NewMockedConfigController
 	ApiControllerFactory = func(url *url.URL, b bool, credentials *models.UserCredentials) controllers.ApiController {
 		apiController := test.MockedApiController{}
 		apiController.On("CreateUser", &vm).Return(nil)
