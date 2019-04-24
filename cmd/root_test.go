@@ -23,7 +23,7 @@ var (
 	rocketchatUrlRaw = "http://localhost:3000"
 )
 
-func NewMockedConfigController(s string, b bool) controllers.ConfigController {
+func NewMockedConfigController(_ string, _ bool) controllers.ConfigController {
 	c := test.MockedConfigController{}
 	c.On("IsSet", "rocketchat.url").Return(true)
 	c.On("GetString", "rocketchat.url").Return(rocketchatUrlRaw)

@@ -1,7 +1,5 @@
 vendor
 .*
-.idea
-.dockerignore
 Dockerfile
 README.md
 *.iml
