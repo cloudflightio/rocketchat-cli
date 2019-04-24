@@ -59,15 +59,14 @@ func (c *SdkApiController) CreateUser(model *models.CreateUserViewModel) (err er
 	}
 
 	response, err := c.client.CreateUser(&request)
-	if err != nil {
-		return
-	}
-
-	if !response.Success {
-		if model.IgnoreExisting && strings.HasSuffix(response.Error, "[error-field-unavailable]") {
+	if err != nil || !response.Success {
+		if err == nil {
+			err = errors.New(response.Error)
+		}
+		if model.IgnoreExisting && strings.HasSuffix(err.Error(), "[error-field-unavailable]") {
 			err = nil
 		} else {
-			err = errors.New(response.Error)
+			return
 		}
 	}
 

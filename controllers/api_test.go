@@ -116,10 +116,8 @@ func TestCreateUserIgnoreExisting(t *testing.T) {
 	c, client, uc := getTestableApiController()
 
 	client.On("Login", uc).Return(nil)
-	response := new(rest.CreateUserResponse)
-	response.Success = false
-	response.Error = fmt.Sprintf("%s is already in use :( [error-field-unavailable]", createUserVM.Username)
-	client.On("CreateUser", &request).Return(response, nil)
+	requestErr := fmt.Errorf("%s is already in use :( [error-field-unavailable]", createUserVM.Username)
+	client.On("CreateUser", &request).Return(nil, requestErr)
 
 	vm := models.CreateUserViewModel(createUserVM)
 	vm.IgnoreExisting = true
