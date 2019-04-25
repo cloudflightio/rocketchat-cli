@@ -1,4 +1,4 @@
-FROM golang:1.10 as builder
+FROM golang:1.12 as builder
 
 LABEL maintainer="Michael Riedmann <michael_riedmann@live.com>"
 
