@@ -5,7 +5,6 @@ import (
 	sdkModels "github.com/RocketChat/Rocket.Chat.Go.SDK/models"
 	"github.com/RocketChat/Rocket.Chat.Go.SDK/rest"
 	"github.com/matryer/try"
-	"github.com/mriedmann/rocketchat-cli/api"
 	"github.com/mriedmann/rocketchat-cli/models"
 	"log"
 	"net/url"
@@ -22,8 +21,8 @@ type ApiController interface {
 }
 
 type SdkApiController struct {
-	client      api.RocketChatClient
-	credentials *sdkModels.UserCredentials
+	Client      RocketChatClient
+	Credentials *sdkModels.UserCredentials
 }
 
 func NewSdkApiController(serverUrl *url.URL, debug bool, credentials *models.UserCredentials) (c ApiController) {
@@ -34,13 +33,13 @@ func NewSdkApiController(serverUrl *url.URL, debug bool, credentials *models.Use
 		Token:    credentials.Token,
 	}
 	return &SdkApiController{
-		client:      rest.NewClient(serverUrl, debug),
-		credentials: &uc,
+		Client:      rest.NewClient(serverUrl, debug),
+		Credentials: &uc,
 	}
 }
 
 func (c *SdkApiController) login() (err error) {
-	err = c.client.Login(c.credentials)
+	err = c.Client.Login(c.Credentials)
 	return
 }
 
@@ -59,7 +58,7 @@ func (c *SdkApiController) CreateUser(model *models.CreateUserViewModel) (err er
 		CustomFields: nil,
 	}
 
-	response, err := c.client.CreateUser(&request)
+	response, err := c.Client.CreateUser(&request)
 	if err != nil || !response.Success {
 		if err == nil {
 			err = errors.New(response.Error)
@@ -98,7 +97,7 @@ func (c *SdkApiController) UpdatePermissions(model *models.UpdatePermissionsView
 	request := rest.UpdatePermissionsRequest{
 		Permissions: []sdkModels.Permission{{ID: model.PermissionId, Roles: model.Roles}},
 	}
-	response, err := c.client.UpdatePermissions(&request)
+	response, err := c.Client.UpdatePermissions(&request)
 	if err != nil {
 		return
 	}

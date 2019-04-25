@@ -179,11 +179,11 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:41aaf393ca0e2fa523e428b29f58fbc9a4bc9f975da5b9b1cac7cef1436a7b53"
+  digest = "1:157e5158a7f29d6633eed502880463aa43de3c36d451c7051591efd12f455ac8"
   name = "golang.org/x/sys"
   packages = ["unix"]
   pruneopts = "UT"
-  revision = "18eb32c0e2f0c2bc8d17842ed4ad41486f349ad4"
+  revision = "9f0b1ff7b46a4014ddb5d4bdb6602a43b882cb27"
 
 [[projects]]
   digest = "1:1e937eedccd32128f7348bae5d224bf9c0c245e19a7f55e38da7cd90732f060d"

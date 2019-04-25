@@ -5,6 +5,7 @@ import (
 	"fmt"
 	sdkModels "github.com/RocketChat/Rocket.Chat.Go.SDK/models"
 	"github.com/RocketChat/Rocket.Chat.Go.SDK/rest"
+	"github.com/mriedmann/rocketchat-cli/controllers"
 	"github.com/mriedmann/rocketchat-cli/models"
 	"github.com/mriedmann/rocketchat-cli/test"
 	"github.com/stretchr/testify/assert"
@@ -30,12 +31,12 @@ var createUserVM = models.CreateUserViewModel{
 	Username: request.Username,
 }
 
-func getTestableApiController() (*SdkApiController, *test.MockedClient, *sdkModels.UserCredentials) {
+func getTestableApiController() (*controllers.SdkApiController, *test.MockedClient, *sdkModels.UserCredentials) {
 	uc := sdkModels.UserCredentials{Email: credentials.Email, Password: credentials.Password}
 	client := test.MockedClient{}
-	c := SdkApiController{
-		client:      &client,
-		credentials: &uc,
+	c := controllers.SdkApiController{
+		Client:      &client,
+		Credentials: &uc,
 	}
 	return &c, &client, &uc
 }
@@ -52,10 +53,10 @@ func TestNewSdkApiController(t *testing.T) {
 	}
 	uc := sdkModels.UserCredentials{Email: credentials.Email, Password: credentials.Password}
 
-	c := NewSdkApiController(serverUrl, true, &credentials).(*SdkApiController)
+	c := controllers.NewSdkApiController(serverUrl, true, &credentials).(*controllers.SdkApiController)
 
-	assert.Equal(t, &expectedClient, c.client)
-	assert.Equal(t, &uc, c.credentials)
+	assert.Equal(t, &expectedClient, c.Client)
+	assert.Equal(t, &uc, c.Credentials)
 }
 
 func TestCreateUser(t *testing.T) {

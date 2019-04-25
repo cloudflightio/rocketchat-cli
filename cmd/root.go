@@ -14,31 +14,25 @@ var ApiControllerFactory controllers.NewApiController
 var Verbose bool
 var Config controllers.ConfigController
 
-var cfgFile string
+var CfgFile string
 
 var apiController controllers.ApiController
 
-var rootCmd = &cobra.Command{
+var RootCmd = &cobra.Command{
 	Use:   "rocketchat-cli",
 	Short: "Commandline Interface for RochetChat",
 	Long:  `This tool provides a basic rocketchat-api cli.`,
 }
 
-func Execute() {
-	if err := rootCmd.Execute(); err != nil {
-		panic(err)
-	}
-}
-
 func init() {
-	cobra.OnInitialize(initConfig)
+	cobra.OnInitialize(InitConfig)
 
-	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.rocketchat-cli.yaml)")
-	rootCmd.PersistentFlags().BoolVarP(&Verbose, "verbose", "v", false, "verbose output")
+	RootCmd.PersistentFlags().StringVar(&CfgFile, "config", "", "config file (default is $HOME/.rocketchat-cli.yaml)")
+	RootCmd.PersistentFlags().BoolVarP(&Verbose, "verbose", "v", false, "verbose output")
 }
 
-func initConfig() {
-	Config = ConfigControllerFactory(cfgFile, Verbose)
+func InitConfig() {
+	Config = ConfigControllerFactory(CfgFile, Verbose)
 
 	if !Config.IsSet("rocketchat.url") {
 		panic("config error - rocketchat.url not set")

@@ -22,5 +22,7 @@ import (
 func main() {
 	cmd.ConfigControllerFactory = controllers.NewViperConfigController
 	cmd.ApiControllerFactory = controllers.NewSdkApiController
-	cmd.Execute()
+	if err := cmd.RootCmd.Execute(); err != nil {
+		panic(err)
+	}
 }

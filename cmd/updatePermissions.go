@@ -24,7 +24,7 @@ var PermissionId string
 var Roles []string
 
 func init() {
-	rootCmd.AddCommand(updatePermissions)
+	RootCmd.AddCommand(updatePermissions)
 
 	flags := updatePermissions.PersistentFlags()
 	flags.StringVarP(&PermissionId, "id", "d", "", "Target permission id (e.g. add-user-to-any-p-room)")

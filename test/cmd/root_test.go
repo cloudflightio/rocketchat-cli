@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"bytes"
+	"github.com/mriedmann/rocketchat-cli/cmd"
 	"github.com/mriedmann/rocketchat-cli/controllers"
 	"github.com/mriedmann/rocketchat-cli/models"
 	"github.com/mriedmann/rocketchat-cli/test"
@@ -37,30 +38,30 @@ func NewMockedConfigController(_ string, _ bool) controllers.ConfigController {
 
 func runCmd(args []string) (*bytes.Buffer, *cobra.Command, error) {
 	buf := new(bytes.Buffer)
-	rootCmd.SetOutput(buf)
-	rootCmd.SetArgs(args)
-	cmd, err := rootCmd.ExecuteC()
-	return buf, cmd, err
+	cmd.RootCmd.SetOutput(buf)
+	cmd.RootCmd.SetArgs(args)
+	cli, err := cmd.RootCmd.ExecuteC()
+	return buf, cli, err
 }
 
 func TestRootInitConfig(t *testing.T) {
 	c := test.MockedConfigController{}
 
-	ConfigControllerFactory = NewMockedConfigController
+	cmd.ConfigControllerFactory = NewMockedConfigController
 
-	initConfig()
+	cmd.InitConfig()
 
 	c.AssertExpectations(t)
 }
 
 func TestRootInitConfigFile(t *testing.T) {
-	cfgFile = "testconfigfile"
+	cmd.CfgFile = "testconfigfile"
 
 	c := test.MockedConfigController{}
 
-	ConfigControllerFactory = NewMockedConfigController
+	cmd.ConfigControllerFactory = NewMockedConfigController
 
-	initConfig()
+	cmd.InitConfig()
 
 	c.AssertExpectations(t)
 }
@@ -68,24 +69,24 @@ func TestRootInitConfigFile(t *testing.T) {
 func TestRootInitConfigNoUrl(t *testing.T) {
 	config := test.MockedConfigController{}
 
-	ConfigControllerFactory = func(s string, b bool) controllers.ConfigController {
+	cmd.ConfigControllerFactory = func(s string, b bool) controllers.ConfigController {
 		config.On("IsSet", "rocketchat.url").Return(false)
 		return &config
 	}
 
-	assert.PanicsWithValue(t, "config error - rocketchat.url not set", initConfig)
+	assert.PanicsWithValue(t, "config error - rocketchat.url not set", cmd.InitConfig)
 }
 
 func TestRootInitConfigInvalidUrl(t *testing.T) {
 	var invalidUrl = ":://invalidurl"
 
-	ApiControllerFactory = func(url *url.URL, b bool, credentials *models.UserCredentials) controllers.ApiController {
+	cmd.ApiControllerFactory = func(url *url.URL, b bool, credentials *models.UserCredentials) controllers.ApiController {
 		t.Fail()
 		return nil
 	}
 
 	c := test.MockedConfigController{}
-	ConfigControllerFactory = func(s string, b bool) controllers.ConfigController {
+	cmd.ConfigControllerFactory = func(s string, b bool) controllers.ConfigController {
 
 		c.On("IsSet", "rocketchat.url").Return(true)
 		c.On("GetString", "rocketchat.url").Return(invalidUrl)
@@ -94,19 +95,19 @@ func TestRootInitConfigInvalidUrl(t *testing.T) {
 		return &c
 	}
 
-	assert.Panics(t, initConfig)
+	assert.Panics(t, cmd.InitConfig)
 }
 
 func TestRootInitConfigBadUrl(t *testing.T) {
 	var invalidUrl = "invalidurl"
 
-	ApiControllerFactory = func(url *url.URL, b bool, credentials *models.UserCredentials) controllers.ApiController {
+	cmd.ApiControllerFactory = func(url *url.URL, b bool, credentials *models.UserCredentials) controllers.ApiController {
 		t.Fail()
 		return nil
 	}
 
 	c := test.MockedConfigController{}
-	ConfigControllerFactory = func(s string, b bool) controllers.ConfigController {
+	cmd.ConfigControllerFactory = func(s string, b bool) controllers.ConfigController {
 
 		c.On("IsSet", "rocketchat.url").Return(true)
 		c.On("GetString", "rocketchat.url").Return(invalidUrl)
@@ -115,5 +116,5 @@ func TestRootInitConfigBadUrl(t *testing.T) {
 		return &c
 	}
 
-	assert.Panics(t, initConfig)
+	assert.Panics(t, cmd.InitConfig)
 }

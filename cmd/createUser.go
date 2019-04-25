@@ -32,7 +32,7 @@ var NewUserRoles []string
 var IgnoreExisting bool
 
 func init() {
-	rootCmd.AddCommand(createUserCmd)
+	RootCmd.AddCommand(createUserCmd)
 
 	flags := createUserCmd.PersistentFlags()
 	flags.StringVarP(&NewUserUsername, "username", "u", "", "Target username of newly created user")

@@ -26,7 +26,7 @@ var maxAttempts int
 var waitTimeInSec int
 
 func init() {
-	rootCmd.AddCommand(pingCmd)
+	RootCmd.AddCommand(pingCmd)
 
 	pingCmd.Flags().IntVarP(&maxAttempts, "maxAttempts", "m", 5, "maximum numbers of retries (default: 5)")
 	pingCmd.Flags().IntVarP(&waitTimeInSec, "waitTime", "w", 5, "time to wait between tries in seconds (default: 5)")
