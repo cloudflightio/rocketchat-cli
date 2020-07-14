@@ -12,8 +12,8 @@ RUN dep ensure -vendor-only
 
 RUN GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go install -v ./...
 
-FROM scratch
+FROM alpine:3.9
 
 COPY --from=builder /go/bin/rocketchat-cli /bin/rocketchat-cli
 
-ENTRYPOINT ["/bin/rocketchat-cli"]
+ENTRYPOINT ["/bin/sh", "-c", "rocketchat-cli"]
