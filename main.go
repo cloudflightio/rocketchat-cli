@@ -15,8 +15,8 @@
 package main
 
 import (
-	"github.com/mriedmann/rocketchat-cli/cmd"
-	"github.com/mriedmann/rocketchat-cli/controllers"
+	"github.com/cloudflightio/rocketchat-cli/cmd"
+	"github.com/cloudflightio/rocketchat-cli/controllers"
 )
 
 func main() {

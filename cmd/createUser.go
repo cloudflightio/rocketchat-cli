@@ -1,7 +1,7 @@
 package cmd
 
 import (
-	"github.com/mriedmann/rocketchat-cli/models"
+	"github.com/cloudflightio/rocketchat-cli/models"
 	"github.com/spf13/cobra"
 )
 

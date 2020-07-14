@@ -2,7 +2,7 @@ package controllers
 
 import (
 	"github.com/magiconair/properties/assert"
-	"github.com/mriedmann/rocketchat-cli/controllers"
+	"github.com/cloudflightio/rocketchat-cli/controllers"
 	"os"
 	"testing"
 )

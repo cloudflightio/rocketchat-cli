@@ -2,10 +2,10 @@ package cmd
 
 import (
 	"bytes"
-	"github.com/mriedmann/rocketchat-cli/cmd"
-	"github.com/mriedmann/rocketchat-cli/controllers"
-	"github.com/mriedmann/rocketchat-cli/models"
-	"github.com/mriedmann/rocketchat-cli/test"
+	"github.com/cloudflightio/rocketchat-cli/cmd"
+	"github.com/cloudflightio/rocketchat-cli/controllers"
+	"github.com/cloudflightio/rocketchat-cli/models"
+	"github.com/cloudflightio/rocketchat-cli/test"
 	"github.com/spf13/cobra"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"

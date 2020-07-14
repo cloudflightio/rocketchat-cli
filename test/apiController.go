@@ -1,7 +1,7 @@
 package test
 
 import (
-	"github.com/mriedmann/rocketchat-cli/models"
+	"github.com/cloudflightio/rocketchat-cli/models"
 	"github.com/stretchr/testify/mock"
 	"time"
 )

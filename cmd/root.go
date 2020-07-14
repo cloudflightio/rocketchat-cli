@@ -2,8 +2,8 @@ package cmd
 
 import (
 	"fmt"
-	"github.com/mriedmann/rocketchat-cli/controllers"
-	"github.com/mriedmann/rocketchat-cli/models"
+	"github.com/cloudflightio/rocketchat-cli/controllers"
+	"github.com/cloudflightio/rocketchat-cli/models"
 	"github.com/spf13/cobra"
 	url2 "net/url"
 )

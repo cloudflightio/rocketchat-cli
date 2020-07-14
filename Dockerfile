@@ -1,18 +1,14 @@
-FROM golang:1.12 as builder
+FROM golang:1.14-alpine as builder
 
-LABEL maintainer="Michael Riedmann <michael_riedmann@live.com>"
+LABEL maintainer="Michael Riedmann <michael.riedmann@cloudflight.io>"
 
-RUN curl -fsSL -o /usr/local/bin/dep https://github.com/golang/dep/releases/download/v0.5.1/dep-linux-amd64 && chmod +x /usr/local/bin/dep
-
-WORKDIR $GOPATH/src/github.com/mriedmann/rocketchat-cli
+WORKDIR $GOPATH/src/github.com/cloudflightio/rocketchat-cli
 
 COPY . .
 
-RUN dep ensure -vendor-only
-
 RUN GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go install -v ./...
 
-FROM alpine:3.9
+FROM alpine:3.12
 
 COPY --from=builder /go/bin/rocketchat-cli /bin/rocketchat-cli
 

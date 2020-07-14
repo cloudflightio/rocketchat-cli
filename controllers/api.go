@@ -5,7 +5,7 @@ import (
 	sdkModels "github.com/RocketChat/Rocket.Chat.Go.SDK/models"
 	"github.com/RocketChat/Rocket.Chat.Go.SDK/rest"
 	"github.com/matryer/try"
-	"github.com/mriedmann/rocketchat-cli/models"
+	"github.com/cloudflightio/rocketchat-cli/models"
 	"log"
 	"net/url"
 	"strings"
