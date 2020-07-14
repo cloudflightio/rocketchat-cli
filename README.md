@@ -8,8 +8,8 @@ Especially useful for kubernetes/openshift init-containers or other simple autom
 
 ## Docker
 
-[![](https://images.microbadger.com/badges/image/cloudflightio/rocketchat-cli.svg)](https://microbadger.com/images/cloudflightio/rocketchat-cli "Get your own image badge on microbadger.com")
-[![](https://images.microbadger.com/badges/version/cloudflightio/rocketchat-cli.svg)](https://microbadger.com/images/cloudflightio/rocketchat-cli "Get your own version badge on microbadger.com")
+[![](https://images.microbadger.com/badges/image/cloudflight/rocketchat-cli.svg)](https://microbadger.com/images/cloudflightio/rocketchat-cli "Get your own image badge on microbadger.com")
+[![](https://images.microbadger.com/badges/version/cloudflight/rocketchat-cli.svg)](https://microbadger.com/images/cloudflightio/rocketchat-cli "Get your own version badge on microbadger.com")
 
 ```
 docker run --rm -it \
