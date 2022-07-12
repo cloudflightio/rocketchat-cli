@@ -1,4 +1,4 @@
-FROM golang:1.14-alpine as builder
+FROM golang:1.18-alpine as builder
 
 LABEL maintainer="Michael Riedmann <michael.riedmann@cloudflight.io>"
 
@@ -8,7 +8,7 @@ COPY . .
 
 RUN GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go install -v ./...
 
-FROM alpine:3.12
+FROM alpine:3.16
 
 COPY --from=builder /go/bin/rocketchat-cli /bin/rocketchat-cli
 
